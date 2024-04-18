@@ -11,6 +11,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class OrderController {
     private final OrderRepository repository;
+    private final MatcherService service;
 
     @GetMapping("/{id}")
     Optional<Order> getSingle(@PathVariable Integer id) {
@@ -23,7 +24,8 @@ public class OrderController {
     }
 
     @PostMapping("/")
-    Order newOrder(@RequestBody Order newOrder) {
+    Order newOrder(@RequestBody Order newOrder) throws Exception {
+        service.addOrder(newOrder);
         return repository.save(newOrder);
     }
 

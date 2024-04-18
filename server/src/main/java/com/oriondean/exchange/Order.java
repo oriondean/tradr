@@ -15,13 +15,13 @@ import java.util.Objects;
 @Table(name = "Order_")
 @AllArgsConstructor
 public class Order {
-    public @Id @GeneratedValue @Getter @Setter Integer id;
+    @Id @GeneratedValue @Getter @Setter Integer id;
 
-    public @Getter @Setter Integer price;
-    public @Getter @Setter Integer quantity;
-    public @Getter @Setter OrderAction action;
-    public final String account;
-    public final Integer initialQuantity;
+    @Getter @Setter Integer price;
+    @Getter @Setter Integer quantity;
+    @Getter @Setter OrderAction action;
+    final String account;
+    final Integer initialQuantity;
 
     Order() {
         id = null;
