@@ -1,23 +1,8 @@
 <div class="order-form">
-  <div>
+  <div class="order-form-title">
     <h3>Order Form</h3>
   </div>
-  <div class="but-sell-btns">
-    <button (click)="operation(true)">Buy</button>
-    <button (click)="operation(false)">Sell</button>
-  </div>
-  <div *ngIf="buy">
-    <div class="market-limit-stop">
-      <button>Market</button>
-      <button>Limit</button>
-      <button>Stop</button>
-    </div>
-    <div>
-      <p>Amount</p>
-      <input placeholder="0.0" />
-    </div>
-  </div>
-  <div *ngIf="!buy">
+  <div>
     <div>
       <p>Quantity</p>
       <input placeholder="0" step="1" [(ngModel)]="quantity" />
@@ -26,8 +11,9 @@
       <p>Price</p>
       <input placeholder="0" type="number" step="1" [(ngModel)]="price" />
     </div>
-    <div>
-      <button (click)="postData()">Sell</button>
+    <div class="buy-sell-btns">
+      <button class="buy" (click)="postData(true)">Buy</button>
+      <button class="sell" (click)="postData(false)">Sell</button>
     </div>
   </div>
 </div>
