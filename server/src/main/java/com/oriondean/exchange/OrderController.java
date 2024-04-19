@@ -24,9 +24,8 @@ public class OrderController {
     }
 
     @PostMapping("/")
-    Order newOrder(@RequestBody Order newOrder) throws Exception {
-        service.addOrder(newOrder);
-        return repository.save(newOrder);
+    List[] newOrder(@RequestBody Order newOrder) throws Exception {
+        return service.addOrder(newOrder);
     }
 
     @PutMapping("/{id}")

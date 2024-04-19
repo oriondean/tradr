@@ -1,16 +1,38 @@
 package com.oriondean.exchange;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class MatcherService {
-    private final List<Order> bidOrders = new ArrayList<>(); // sorted lowest to highest price (best offer)
-    private final List<Order> askOrders = new ArrayList<>(); // sorted highest to lowest price (best offer)
+    private final List<Order> bidOrders; // sorted lowest to highest price (best offer)
+    private final List<Order> askOrders; // sorted highest to lowest price (best offer)
+    private final OrderRepository repository;
+
+    private static final Logger log = LoggerFactory.getLogger(MatcherService.class);
+
+    MatcherService(OrderRepository repository) {
+        this.repository = repository;
+
+        repository.save(new Order(1, 35, 25, OrderAction.BID, "dkerr", 25));
+        repository.save(new Order(2, 40, 25, OrderAction.BID, "dkerr", 25));
+        repository.save(new Order(3, 45, 25, OrderAction.BID, "dkerr", 25));
+
+        Map<Boolean, List<Order>> initialOrders = repository
+                .findAll()
+                .stream()
+                .collect(Collectors.partitioningBy(Order::isBid));
+
+        this.bidOrders = initialOrders.get(Boolean.TRUE);
+        this.askOrders = initialOrders.get(Boolean.FALSE);
+
+        log.info("Initial Bids: " + this.bidOrders);
+        log.info("Initial Asks: " + this.askOrders);
+    }
 
     public List[] addOrder(Order newOrder) throws Exception {
         Optional<Order> order = match(newOrder, newOrder.isBid() ? askOrders : bidOrders);
@@ -25,6 +47,7 @@ public class MatcherService {
 
             // TODO: emit "new-order"
             orders.add(index, order.get());
+            repository.save(order.get());
         }
 
         return new List[]{bidOrders, askOrders};
