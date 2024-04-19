@@ -5,17 +5,23 @@ import {
 } from '@angular/common/http';
 import { Component, input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-order-form',
   standalone: true,
-  imports: [HttpClientModule, FormsModule],
+  imports: [CommonModule, HttpClientModule, FormsModule],
   templateUrl: './order-form.component.html',
   styleUrl: './order-form.component.css',
 })
+
 export class OrderFormComponent {
   constructor(private http: HttpClient) {}
-  inputValue: number = 0;
+  quantity = 0;
+  price = 0;
+  action = "BID";
+  buy = true;
 
   sendData(data: any) {
     const url = 'http://localhost:8080/order/';
@@ -25,16 +31,20 @@ export class OrderFormComponent {
     return this.http.post(url, data, { headers });
   }
 
-  operation() {
-    
+  operation(buy: boolean) {
+    this.buy = buy;
   }
 
   postData() {
-    console.log('Input value: ', this.inputValue)
+    let action = "BID"
+    if (!this.buy){
+      action = "ASK"
+    }
+    console.log('Input value: ', this.quantity)
     const data: any = {
-      quantity: 30,
-      price: 35,
-      action: 'ASK',
+      quantity: this.quantity,
+      price: this.price,
+      action,
       account: 'dkerr',
       initialQuantity: 30,
     };
