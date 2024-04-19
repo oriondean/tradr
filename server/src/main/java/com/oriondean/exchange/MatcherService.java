@@ -101,11 +101,17 @@ public class MatcherService {
     }
 
     public List<PublicOrder> getPublicBids() {
-        return orderRepository.findAllByAction(OrderAction.BID).stream().map((order) -> new PublicOrder(order.getQuantity(), order.getPrice())).sorted(Comparator.comparingInt(PublicOrder::getPrice)).collect(Collectors.toList());
+        return orderRepository.findAllByAction(OrderAction.BID).stream()
+                .map((order) -> new PublicOrder(order.getQuantity(), order.getPrice()))
+                .sorted(Comparator.comparingInt(PublicOrder::getPrice))
+                .collect(Collectors.toList());
     }
 
     public List<PublicOrder> getPublicAsks() {
-        return orderRepository.findAllByAction(OrderAction.ASK).stream().map((order) -> new PublicOrder(order.getQuantity(), order.getPrice())).sorted(Comparator.comparingInt(PublicOrder::getPrice)).collect(Collectors.toList());
+        return orderRepository.findAllByAction(OrderAction.ASK).stream()
+                .map((order) -> new PublicOrder(order.getQuantity(), order.getPrice()))
+                .sorted(Comparator.comparingInt(PublicOrder::getPrice))
+                .collect(Collectors.toList());
     }
 
     @Scheduled(fixedRate = 3000)
