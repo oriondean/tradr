@@ -12,6 +12,7 @@ import java.util.Optional;
 @CrossOrigin(origins = "http://localhost:4200")
 public class OrderController {
     private final OrderRepository repository;
+    private final MatcherService service;
 
     @GetMapping("/{id}")
     Optional<Order> getSingle(@PathVariable Integer id) {
@@ -24,8 +25,9 @@ public class OrderController {
     }
 
     @PostMapping("/")
-    Order newOrder(@RequestBody Order newOrder) {
-        return repository.save(newOrder);
+    List[] newOrder(@RequestBody Order newOrder) throws Exception {
+        Order toAdd = new Order(newOrder.getPrice(), newOrder.getQuantity(), newOrder.getAction(), newOrder.getAccount());
+        return service.addOrder(toAdd);
     }
 
     @PutMapping("/{id}")

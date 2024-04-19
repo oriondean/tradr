@@ -1,27 +1,25 @@
 package com.oriondean.exchange;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Objects;
 
+@Getter
 @Entity
 @Table(name = "Order_")
 @AllArgsConstructor
 public class Order {
-    public @Id @GeneratedValue @Getter @Setter Integer id;
+    @Id @GeneratedValue
+    @Setter Integer id;
 
-    public @Getter @Setter Integer price;
-    public @Getter @Setter Integer quantity;
-    public @Getter @Setter OrderAction action;
-    public final String account;
-    public final Integer initialQuantity;
+    @Setter Integer price;
+    @Setter Integer quantity;
+    @Setter OrderAction action;
+    final String account;
+    final Integer initialQuantity;
 
     Order() {
         id = null;
@@ -30,6 +28,15 @@ public class Order {
         action = OrderAction.ASK;
         account = "system";
         initialQuantity = 0;
+    }
+
+    Order(Integer price, Integer quantity, OrderAction action, String account) {
+        this.id = null; // auto generated
+        this.price = price;
+        this.quantity = quantity;
+        this.initialQuantity = quantity;
+        this.action = action;
+        this.account = account;
     }
 
     public boolean isBid() {
