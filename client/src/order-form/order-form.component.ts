@@ -7,6 +7,7 @@ import { Component, input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Action, Sell } from '../constants';
+import { ACTION } from 'next/dist/client/components/app-router-headers';
 
 @Component({
   selector: 'app-order-form',
@@ -34,8 +35,10 @@ export class OrderFormComponent {
     this.buy = buy;
   }
 
-  postData() {
-    if (!this.buy) {
+  postData(buy: boolean) {
+    if (buy) {
+      this.action = Action.BID;
+    } else {
       this.action = Action.ASK;
     }
     console.log('Input value: ', this.quantity);
