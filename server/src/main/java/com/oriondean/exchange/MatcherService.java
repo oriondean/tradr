@@ -66,7 +66,8 @@ public class MatcherService {
             if (order.getQuantity() >= existing.getQuantity()) {
                 // TODO emit "matched-order"
                 // this.emit("matched-order", existingOrder);
-                candidates.removeFirst(); // existing fully matched, remove
+                Order removed = candidates.removeFirst(); // existing fully matched, remove
+                repository.delete(removed);
 
                 if (Objects.equals(order.getQuantity(), existing.getQuantity())) {
                     return Optional.empty();
@@ -74,8 +75,12 @@ public class MatcherService {
 
                 order = order.reduceQuantity(existing.getQuantity());
             } else {
-                candidates.removeFirst();
-                candidates.addFirst(existing.reduceQuantity(order.quantity)); // existing partially matched
+                Order removed = candidates.removeFirst();
+                repository.delete(removed);
+
+                Order toAdd = existing.reduceQuantity(order.quantity);
+                repository.save(toAdd);
+                candidates.addFirst(toAdd); // existing partially matched
                 // TODO emit "partially-matched-order"
                 // this.emit("partially-matched-order", candidates[0], existingOrder, matchedQuantity);
                 return Optional.empty();

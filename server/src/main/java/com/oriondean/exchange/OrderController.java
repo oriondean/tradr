@@ -25,7 +25,8 @@ public class OrderController {
 
     @PostMapping("/")
     List[] newOrder(@RequestBody Order newOrder) throws Exception {
-        return service.addOrder(newOrder);
+        Order toAdd = new Order(newOrder.getPrice(), newOrder.getQuantity(), newOrder.getAction(), newOrder.getAccount());
+        return service.addOrder(toAdd);
     }
 
     @PutMapping("/{id}")
