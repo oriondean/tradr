@@ -20,8 +20,8 @@ export class AppComponent {
       onConnect: (frame) => {
         console.log('connected', frame);
 
-        client.subscribe('/topic/greeting', (greeting) => {
-          console.log('subscribe greeting', greeting)
+        client.subscribe('/topic/trades', (greeting) => {
+          console.log('trade inbound', JSON.parse(greeting.body));
         });
       },
       onStompError: (e) => console.log('onStompError', e),
