@@ -1,5 +1,6 @@
 package com.oriondean.exchange;
 
+import com.oriondean.exchange.data.PublicOrder;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +23,14 @@ public class OrderController {
     @GetMapping("/")
     List<Order> getAll() {
         return repository.findAll();
+    }
+    @GetMapping("/bids")
+    List<PublicOrder> getBids() {
+        return service.getPublicBids();
+    }
+    @GetMapping("/asks")
+    List<PublicOrder> getAsks() {
+        return service.getPublicAsks();
     }
 
     @PostMapping("/")

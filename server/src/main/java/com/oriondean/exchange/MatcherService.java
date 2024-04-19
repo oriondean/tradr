@@ -1,5 +1,6 @@
 package com.oriondean.exchange;
 
+import com.oriondean.exchange.data.PublicOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -8,6 +9,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.summingInt;
 
 @Service
 public class MatcherService {
@@ -27,13 +31,11 @@ public class MatcherService {
 
         orderRepository.save(new Order(1, 35, 25, OrderAction.BID, "dkerr", 25));
         orderRepository.save(new Order(2, 40, 25, OrderAction.BID, "dkerr", 25));
+        orderRepository.save(new Order(2, 40, 15, OrderAction.BID, "dkerr", 25));
         orderRepository.save(new Order(3, 45, 25, OrderAction.BID, "dkerr", 25));
         tradeRepository.save(new Trade(50, 30, "system"));
 
-        Map<Boolean, List<Order>> initialOrders = orderRepository
-                .findAll()
-                .stream()
-                .collect(Collectors.partitioningBy(Order::isBid));
+        Map<Boolean, List<Order>> initialOrders = orderRepository.findAll().stream().collect(Collectors.partitioningBy(Order::isBid));
 
         this.bidOrders = initialOrders.get(Boolean.TRUE);
         this.askOrders = initialOrders.get(Boolean.FALSE);
@@ -96,6 +98,14 @@ public class MatcherService {
         }
 
         return Optional.ofNullable(order);
+    }
+
+    public List<PublicOrder> getPublicBids() {
+        return orderRepository.findAllByAction(OrderAction.BID).stream().map((order) -> new PublicOrder(order.getQuantity(), order.getPrice())).sorted(Comparator.comparingInt(PublicOrder::getPrice)).collect(Collectors.toList());
+    }
+
+    public List<PublicOrder> getPublicAsks() {
+        return orderRepository.findAllByAction(OrderAction.ASK).stream().map((order) -> new PublicOrder(order.getQuantity(), order.getPrice())).sorted(Comparator.comparingInt(PublicOrder::getPrice)).collect(Collectors.toList());
     }
 
     @Scheduled(fixedRate = 3000)
