@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { OrderFormComponent } from '../order-form/order-form.component';
 import { PublicOrdersComponent } from './components/public-orders/public-orders.component';
+import { Client } from '@stomp/stompjs';
 
 @Component({
   selector: 'app-root',
@@ -12,4 +13,21 @@ import { PublicOrdersComponent } from './components/public-orders/public-orders.
 })
 export class AppComponent {
   title = 'tradr';
+
+  constructor() {
+    const client = new Client({
+      brokerURL: 'ws://localhost:8080/',
+      onConnect: (frame) => {
+        console.log('connected', frame);
+
+        client.subscribe('/topic/greeting', (greeting) => {
+          console.log('subscribe greeting', greeting)
+        });
+      },
+      onStompError: (e) => console.log('onStompError', e),
+      onWebSocketError: (e) => console.log('onWebsocketError', e.message)
+    });
+
+    client.activate();
+  }
 }
