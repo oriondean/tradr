@@ -9,6 +9,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("order")
 @AllArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200")
 public class OrderController {
     private final OrderRepository repository;
 
