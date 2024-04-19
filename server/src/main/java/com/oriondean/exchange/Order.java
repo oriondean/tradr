@@ -39,6 +39,10 @@ public class Order {
         this.account = account;
     }
 
+    public static Order fromOrderRequest(OrderRequest request) {
+        return new Order(request.price(), request.quantity(), request.action(), request.account());
+    }
+
     public boolean isBid() {
         return this.action == OrderAction.BID;
     }
