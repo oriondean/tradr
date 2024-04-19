@@ -44,7 +44,7 @@ public class MatcherService {
         log.info("Initial Asks: " + this.askOrders);
     }
 
-    public List[] addOrder(Order newOrder) throws Exception {
+    public List<Order>[] addOrder(Order newOrder) throws Exception {
         Optional<Order> order = match(newOrder, newOrder.isBid() ? askOrders : bidOrders);
 
         if (order.isPresent()) {

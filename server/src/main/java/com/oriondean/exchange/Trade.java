@@ -1,6 +1,6 @@
 package com.oriondean.exchange;
 
-import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -9,11 +9,11 @@ import java.time.Instant;
 
 @Entity
 public class Trade {
-    final @Id @GeneratedValue Integer id;
-    final Integer price;
-    final Integer quantity;
-    final Instant created;
-    final String aggressor;
+    final @JsonProperty @Id @GeneratedValue Integer id;
+    @JsonProperty final Integer price;
+    @JsonProperty final Integer quantity;
+    @JsonProperty final Instant created;
+    @JsonProperty final String aggressor;
 
     Trade() {
         this.id = null;
@@ -29,9 +29,5 @@ public class Trade {
         this.quantity = quantity;
         this.created = Instant.now();
         this.aggressor = aggressor;
-    }
-
-    public String getContent() {
-        return "{ \"id\":" + id + ", \"price\": " + price + ", \"quantity\": " + quantity + "}";
     }
 }
