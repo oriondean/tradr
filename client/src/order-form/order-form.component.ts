@@ -6,7 +6,7 @@ import {
 import { Component, input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-
+import { Action, Sell } from '../constants';
 
 @Component({
   selector: 'app-order-form',
@@ -15,12 +15,11 @@ import { CommonModule } from '@angular/common';
   templateUrl: './order-form.component.html',
   styleUrl: './order-form.component.css',
 })
-
 export class OrderFormComponent {
   constructor(private http: HttpClient) {}
   quantity = 0;
   price = 0;
-  action = "BID";
+  action: Action = Action.BID;
   buy = true;
 
   sendData(data: any) {
@@ -36,15 +35,14 @@ export class OrderFormComponent {
   }
 
   postData() {
-    let action = "BID"
-    if (!this.buy){
-      action = "ASK"
+    if (!this.buy) {
+      this.action = Action.ASK;
     }
-    console.log('Input value: ', this.quantity)
-    const data: any = {
+    console.log('Input value: ', this.quantity);
+    const data: Sell = {
       quantity: this.quantity,
       price: this.price,
-      action,
+      action: this.action,
       account: 'dkerr',
       initialQuantity: 30,
     };
