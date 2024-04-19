@@ -2,6 +2,8 @@ package com.oriondean.exchange;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -11,18 +13,24 @@ import java.util.stream.Collectors;
 public class MatcherService {
     private final List<Order> bidOrders; // sorted lowest to highest price (best offer)
     private final List<Order> askOrders; // sorted highest to lowest price (best offer)
-    private final OrderRepository repository;
+    private final OrderRepository orderRepository;
+    private final TradeRepository tradeRepository;
+
+    private final SimpMessagingTemplate template;
 
     private static final Logger log = LoggerFactory.getLogger(MatcherService.class);
 
-    MatcherService(OrderRepository repository) {
-        this.repository = repository;
+    MatcherService(OrderRepository orderRepository, TradeRepository tradeRepository, SimpMessagingTemplate template) {
+        this.orderRepository = orderRepository;
+        this.tradeRepository = tradeRepository;
+        this.template = template;
 
-        repository.save(new Order(1, 35, 25, OrderAction.BID, "dkerr", 25));
-        repository.save(new Order(2, 40, 25, OrderAction.BID, "dkerr", 25));
-        repository.save(new Order(3, 45, 25, OrderAction.BID, "dkerr", 25));
+        orderRepository.save(new Order(1, 35, 25, OrderAction.BID, "dkerr", 25));
+        orderRepository.save(new Order(2, 40, 25, OrderAction.BID, "dkerr", 25));
+        orderRepository.save(new Order(3, 45, 25, OrderAction.BID, "dkerr", 25));
+        tradeRepository.save(new Trade(50, 30, "system"));
 
-        Map<Boolean, List<Order>> initialOrders = repository
+        Map<Boolean, List<Order>> initialOrders = orderRepository
                 .findAll()
                 .stream()
                 .collect(Collectors.partitioningBy(Order::isBid));
@@ -47,7 +55,7 @@ public class MatcherService {
 
             // TODO: emit "new-order"
             orders.add(index, order.get());
-            repository.save(order.get());
+            orderRepository.save(order.get());
         }
 
         return new List[]{bidOrders, askOrders};
@@ -60,14 +68,14 @@ public class MatcherService {
             Order existing = candidates.getFirst();
             Integer matchedQuantity = Math.min(existing.getQuantity(), order.getQuantity());
 
-            // TODO emit new trade (this.emit("new-trade"))
-            //this.emit("new-trade", new Trade(existingOrder.price, matchedQuantity, order.action));
+            Trade trade = tradeRepository.save(new Trade(existing.getPrice(), matchedQuantity, order.getAccount()));
+            this.template.convertAndSend("/topic/trades", trade);
 
             if (order.getQuantity() >= existing.getQuantity()) {
                 // TODO emit "matched-order"
                 // this.emit("matched-order", existingOrder);
                 Order removed = candidates.removeFirst(); // existing fully matched, remove
-                repository.delete(removed);
+                orderRepository.delete(removed);
 
                 if (Objects.equals(order.getQuantity(), existing.getQuantity())) {
                     return Optional.empty();
@@ -76,10 +84,10 @@ public class MatcherService {
                 order = order.reduceQuantity(existing.getQuantity());
             } else {
                 Order removed = candidates.removeFirst();
-                repository.delete(removed);
+                orderRepository.delete(removed);
 
                 Order toAdd = existing.reduceQuantity(order.quantity);
-                repository.save(toAdd);
+                orderRepository.save(toAdd);
                 candidates.addFirst(toAdd); // existing partially matched
                 // TODO emit "partially-matched-order"
                 // this.emit("partially-matched-order", candidates[0], existingOrder, matchedQuantity);
@@ -88,5 +96,10 @@ public class MatcherService {
         }
 
         return Optional.ofNullable(order);
+    }
+
+    @Scheduled(fixedRate = 3000)
+    public void fireSomething() {
+        this.template.convertAndSend("/topic/greetings", "Hello");
     }
 }
