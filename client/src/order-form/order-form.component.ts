@@ -25,6 +25,10 @@ export class OrderFormComponent {
     return this.http.post(url, data, { headers });
   }
 
+  operation() {
+    
+  }
+
   postData() {
     console.log('Input value: ', this.inputValue)
     const data: any = {
