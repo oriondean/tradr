@@ -31,8 +31,8 @@ public class MatcherService {
 
         orderRepository.save(new Order(1, 35, 25, OrderAction.BID, "dkerr", 25));
         orderRepository.save(new Order(2, 40, 25, OrderAction.BID, "dkerr", 25));
-        orderRepository.save(new Order(2, 40, 15, OrderAction.BID, "dkerr", 25));
-        orderRepository.save(new Order(3, 45, 25, OrderAction.BID, "dkerr", 25));
+        orderRepository.save(new Order(3, 40, 15, OrderAction.BID, "dkerr", 25));
+        orderRepository.save(new Order(4, 45, 25, OrderAction.BID, "dkerr", 25));
         tradeRepository.save(new Trade(50, 30, "system"));
 
         Map<Boolean, List<Order>> initialOrders = orderRepository.findAll().stream().collect(Collectors.partitioningBy(Order::isBid));
@@ -101,17 +101,41 @@ public class MatcherService {
     }
 
     public List<PublicOrder> getPublicBids() {
-        return orderRepository.findAllByAction(OrderAction.BID).stream()
+        return aggregateOrders(orderRepository.findAllByAction(OrderAction.BID).stream()
                 .map((order) -> new PublicOrder(order.getQuantity(), order.getPrice()))
                 .sorted(Comparator.comparingInt(PublicOrder::getPrice))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
     }
 
     public List<PublicOrder> getPublicAsks() {
-        return orderRepository.findAllByAction(OrderAction.ASK).stream()
+        return aggregateOrders(orderRepository.findAllByAction(OrderAction.ASK).stream()
                 .map((order) -> new PublicOrder(order.getQuantity(), order.getPrice()))
                 .sorted(Comparator.comparingInt(PublicOrder::getPrice))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
+    }
+
+    private List<PublicOrder> aggregateOrders(List<PublicOrder> orders) {
+
+        PublicOrder currentOrder = null;
+        ArrayList<PublicOrder> result = new ArrayList<>();
+
+        System.err.println(orders);
+
+        for (PublicOrder order: orders){
+            if (currentOrder == null) {
+                currentOrder = order;
+            } else {
+                if (currentOrder.getPrice() == order.getPrice()) {
+                    currentOrder.setQuantity(currentOrder.getQuantity() + order.getQuantity());
+                } else {
+                    result.add(currentOrder);
+                    currentOrder = order;
+                }
+            }
+        }
+        result.add(currentOrder);
+
+        return result;
     }
 
     @Scheduled(fixedRate = 3000)
