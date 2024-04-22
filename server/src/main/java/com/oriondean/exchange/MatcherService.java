@@ -119,8 +119,6 @@ public class MatcherService {
         PublicOrder currentOrder = null;
         ArrayList<PublicOrder> result = new ArrayList<>();
 
-        System.err.println(orders);
-
         for (PublicOrder order: orders){
             if (currentOrder == null) {
                 currentOrder = order;
