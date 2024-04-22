@@ -3,10 +3,9 @@ export const enum Action {
   ASK = 'ASK',
 }
 
-export type Sell = {
+export interface Trade {
   quantity: number;
   price: number;
   action: Action;
   account: String;
-  initialQuantity: number;
 };

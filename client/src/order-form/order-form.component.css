@@ -1,22 +1,94 @@
 .order-form {
-    max-width: 20rem;
-    min-height: 30rem;
-    background-color: #202424;
-    justify-content: center;
+  max-width: 20rem;
+  min-height: 28rem;
+  background-color: #202424;
+  justify-content: center;
 }
 
 .order-form-title {
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  color: white;
+  background-color: #424242;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.buy-sell-btns {
-    display: flex;
-    align-items: center;
+.order-form-title-text {
+  padding-top: 1rem;
 }
 
-.buy {
-    margin-right: 2rem;
+.bid {
+  width: 5rem;
+}
+
+.ask {
+  width: 5rem;
+}
+
+.bid-ask-btns {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 4rem;
+  border: none;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center align horizontally */
+  justify-content: center; /* Center align vertically */
+}
+
+mat-label:focus {
+  color: aqua;
+}
+
+mat-card {
+  min-height: 10rem;
+  width: 100%;
+}
+
+.amount-input-box:focus {
+  border-color: aqua;
+  color: blue;
+}
+
+.separate-mat-card-and-btn {
+  padding-bottom: 1rem;
+}
+
+.amount-input-box {
+  color: white;
+  background-color: black;
+  min-height: 2rem;
+  border: white;
+  text-align: right;
+}
+
+.amount-input-box::-webkit-inner-spin-button,
+amount-input-box::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+.price-input-box {
+  color: white;
+  background-color: black;
+  min-height: 2rem;
+  border: white;
+  text-align: right;
+}
+
+.price-input-box::-webkit-inner-spin-button,
+price-input-box::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+.complete-trade-container {
+  text-align: center;
+}
+
+.complete-trade-btn {
+  background-color: #424242;
+  border: none;
 }
