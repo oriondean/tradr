@@ -59,6 +59,8 @@ public class MatcherService {
             orders.add(index, order.get());
             orderRepository.save(order.get());
         }
+        this.template.convertAndSend("/topic/public/bids", getPublicBids());
+        this.template.convertAndSend("/topic/public/asks", getPublicAsks());
 
         return new List[]{bidOrders, askOrders};
     }

@@ -10,3 +10,5 @@ export type Sell = {
   account: String;
   initialQuantity: number;
 };
+
+export const API_ROOT: string = 'http://localhost:8080'
