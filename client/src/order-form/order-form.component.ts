@@ -43,10 +43,10 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrl: './order-form.component.css',
 })
 export class OrderFormComponent {
-  amount = new FormControl();
+  quantity = new FormControl();
   price = new FormControl();
   formGroup = new FormGroup({
-    amount: this.amount,
+    quantity: this.quantity,
     price: this.price,
   });
   bidInitialValue = 'bid';
@@ -63,15 +63,10 @@ export class OrderFormComponent {
     return this.http.post(url, data, { headers });
   }
 
-  operation(buy: boolean) {
-    this.buy = buy;
-  }
-
   postData() {
-    if (this.formGroup.value.amount && this.formGroup.value.price) {
-      console.log('Input value: ', this.formGroup.value.amount);
+    if (this.formGroup.value.quantity && this.formGroup.value.price) {
       const data: Trade = {
-        quantity: this.formGroup.value.amount,
+        quantity: this.formGroup.value.quantity,
         price: this.formGroup.value.price,
         action: this.action,
         account: 'dkerr',

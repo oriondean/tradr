@@ -1,5 +1,10 @@
+mat-card  {
+  height: 100%;
+}
+
 mat-card-content {
   padding-left: 2rem;
+  height: 100%;
 }
 
 mat-button-toggle-group {

@@ -1,4 +1,4 @@
-<div class="public-orders">
+<!-- <div class="public-orders">
   <p>Orders</p>
   <table mat-table [dataSource]="[bidOrders]">
     <ng-container matColumnDef="quantity">
@@ -15,7 +15,7 @@
       *matRowDef="let row; columns: displayedColumns"
     ></tr>
   </table>
-</div>
+</div> -->
 
 <!-- <div class="public-orders">
   <p>Orders</p>
@@ -44,3 +44,38 @@
     </div>
   </div>
 </div> -->
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Order Book</mat-card-title>
+    <mat-card-subtitle>Last Updated: Never</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="public-orders">
+      <p>Orders</p>
+      <div class="order-table">
+        <div class="bid-orders column">
+          <p class="row">Bids</p>
+          <div class="row">
+            <p class="column">Quantity</p>
+            <p class="column">Price</p>
+          </div>
+          <div class="row bid-row" *ngFor="let bid of bidOrders | keyvalue">
+            <p class="column">{{ bid.value }}</p>
+            <p class="column">{{ bid.key }}</p>
+          </div>
+        </div>
+        <div class="ask-orders column">
+          <p class="row">Asks</p>
+          <div class="row">
+            <p class="column">Quantity</p>
+            <p class="column">Price</p>
+          </div>
+          <div class="row ask-row" *ngFor="let ask of askOrders | keyvalue">
+            <p class="column">{{ ask.value }}</p>
+            <p class="column">{{ ask.key }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

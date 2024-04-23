@@ -3,11 +3,13 @@ import { Component } from '@angular/core';
 import { PublicOrdersService } from '../../services/public-orders/public-orders.service';
 import { Client } from '@stomp/stompjs';
 import { MatTableModule } from '@angular/material/table';
+import { MatCardModule } from '@angular/material/card';
+
 
 @Component({
   selector: 'app-public-orders',
   standalone: true,
-  imports: [CommonModule, MatTableModule],
+  imports: [CommonModule, MatCardModule, MatTableModule],
   templateUrl: './public-orders.component.html',
   styleUrl: './public-orders.component.css',
 })
