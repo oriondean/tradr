@@ -3,13 +3,10 @@ package com.oriondean.exchange;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static java.util.stream.Collectors.groupingBy;
 
 @Service
 public class MatcherService {
@@ -102,16 +99,11 @@ public class MatcherService {
 
     public Map<Integer, Integer> getPublicBids() {
         return orderRepository.findAllByAction(OrderAction.BID).stream()
-                .collect(Collectors.toMap(Order::getPrice, Order::getQuantity, (first, second) -> first+second));
+                .collect(Collectors.toMap(Order::getPrice, Order::getQuantity, Integer::sum));
     }
 
     public Map<Integer, Integer> getPublicAsks() {
         return orderRepository.findAllByAction(OrderAction.ASK).stream()
-                .collect(Collectors.toMap(Order::getPrice, Order::getQuantity, (first, second) -> first+second));
-    }
-
-    @Scheduled(fixedRate = 3000)
-    public void fireSomething() {
-        this.template.convertAndSend("/topic/greetings", "Hello");
+                .collect(Collectors.toMap(Order::getPrice, Order::getQuantity, Integer::sum));
     }
 }
