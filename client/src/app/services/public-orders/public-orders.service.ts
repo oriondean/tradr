@@ -6,7 +6,6 @@ import {
 import { Injectable } from '@angular/core';
 import { API_ROOT } from '../../../constants';
 import { Observable, catchError, throwError } from 'rxjs';
-import { PublicOrder } from '../../components/public-orders/public-orders.component';
 
 @Injectable({
   providedIn: 'root',
@@ -20,15 +19,15 @@ export class PublicOrdersService {
 
   constructor(private http: HttpClient) {}
 
-  getBids(): Observable<PublicOrder[]> {
+  getBids(): Observable<Map<number, number>> {
     return this.http
-      .get<PublicOrder[]>(`${this.url}/bids`, this.httpOptions)
+      .get<Map<number, number>>(`${this.url}/bids`, this.httpOptions)
       .pipe(catchError(this.handleError));
   }
 
-  getAsks(): Observable<PublicOrder[]> {
+  getAsks(): Observable<Map<number, number>> {
     return this.http
-      .get<PublicOrder[]>(`${this.url}/asks`, this.httpOptions)
+      .get<Map<number, number>>(`${this.url}/asks`, this.httpOptions)
       .pipe(catchError(this.handleError));
   }
 

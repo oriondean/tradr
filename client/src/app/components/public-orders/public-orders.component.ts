@@ -3,10 +3,6 @@ import { Component } from '@angular/core';
 import { PublicOrdersService } from '../../services/public-orders/public-orders.service';
 import { Client } from '@stomp/stompjs';
 
-export type PublicOrder = {
-  quantity: number;
-  price: number;
-};
 
 @Component({
   selector: 'app-public-orders',
@@ -16,8 +12,8 @@ export type PublicOrder = {
   styleUrl: './public-orders.component.css',
 })
 export class PublicOrdersComponent {
-  askOrders: PublicOrder[] = [];
-  bidOrders: PublicOrder[] = [];
+  askOrders: Map<number, number> = new Map<number, number>();
+  bidOrders: Map<number, number> = new Map<number, number>();
 
   constructor(private orderService: PublicOrdersService) {
     this.orderService.getAsks().subscribe((asks) => (this.askOrders = asks));
