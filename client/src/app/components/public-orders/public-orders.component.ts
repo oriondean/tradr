@@ -2,12 +2,13 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { PublicOrdersService } from '../../services/public-orders/public-orders.service';
 import { Client } from '@stomp/stompjs';
+import { MatCardModule } from '@angular/material/card';
 
 
 @Component({
   selector: 'app-public-orders',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatCardModule],
   templateUrl: './public-orders.component.html',
   styleUrl: './public-orders.component.css',
 })
