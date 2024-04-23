@@ -21,34 +21,5 @@ export class PublicOrdersComponent {
   constructor(private orderService: PublicOrdersService) {
     this.orderService.getAsks().subscribe((asks) => (this.askOrders = asks));
     this.orderService.getBids().subscribe((bids) => (this.bidOrders = bids));
-
-    const bidClient = new Client({
-      brokerURL: 'ws://localhost:8080/',
-      onConnect: (frame) => {
-        console.log('connected', frame);
-
-        bidClient.subscribe('/topic/public/bids', (bids) => {
-          this.bidOrders = JSON.parse(bids.body);
-        });
-      },
-      onStompError: (e) => console.log('onStompError', e),
-      onWebSocketError: (e) => console.log('onWebsocketError', e.message),
-    });
-
-    const askClient = new Client({
-      brokerURL: 'ws://localhost:8080/',
-      onConnect: (frame) => {
-        console.log('connected', frame);
-
-        askClient.subscribe('/topic/public/asks', (asks) => {
-          this.askOrders = JSON.parse(asks.body);
-        });
-      },
-      onStompError: (e) => console.log('onStompError', e),
-      onWebSocketError: (e) => console.log('onWebsocketError', e.message),
-    });
-
-    bidClient.activate();
-    askClient.activate();
   }
 }
