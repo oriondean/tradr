@@ -10,9 +10,6 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.summingInt;
-
 @Service
 public class MatcherService {
     private final List<Order> bidOrders; // sorted lowest to highest price (best offer)
@@ -71,7 +68,8 @@ public class MatcherService {
             Integer matchedQuantity = Math.min(existing.getQuantity(), order.getQuantity());
 
             Trade trade = tradeRepository.save(new Trade(existing.getPrice(), matchedQuantity, order.getAccount()));
-            this.template.convertAndSend("/topic/trades", trade);
+
+            this.template.convertAndSend("/topic/trades", List.of(trade) );
 
             if (order.getQuantity() >= existing.getQuantity()) {
                 // TODO emit "matched-order"

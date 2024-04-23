@@ -1,0 +1,18 @@
+.trade-history {
+    border: solid;
+    width: 50%;
+}
+
+.trade-history-table{
+    display: flex;
+}
+
+.column {
+    width: 50%;
+}
+
+.row {
+    display: flex;
+    padding: 5px;
+    border-bottom: solid 1pt;
+}

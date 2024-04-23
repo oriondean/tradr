@@ -7,7 +7,6 @@ import { Component, input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Action, Sell } from '../constants';
-import { ACTION } from 'next/dist/client/components/app-router-headers';
 
 @Component({
   selector: 'app-order-form',
