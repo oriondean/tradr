@@ -6,3 +6,11 @@
   width: 15%;
   margin-bottom: 1rem;
 }
+
+.aggregated-order-book-container {
+  margin-bottom: 1rem;
+}
+
+.private-order-book-container {
+  height: 150px;
+}
