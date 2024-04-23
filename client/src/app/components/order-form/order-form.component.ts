@@ -11,7 +11,7 @@ import {
   FormsModule,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Action, Trade } from '../types';
+import { Action, Trade } from '../../../types';
 import {
   MatButtonToggleChange,
   MatButtonToggleModule,
