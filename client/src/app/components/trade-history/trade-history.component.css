@@ -16,3 +16,7 @@
     padding: 5px;
     border-bottom: solid 1pt;
 }
+
+mat-card {
+  height: 100%;
+}

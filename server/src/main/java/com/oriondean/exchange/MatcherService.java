@@ -1,10 +1,8 @@
 package com.oriondean.exchange;
 
-import com.oriondean.exchange.data.PublicOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -28,8 +26,8 @@ public class MatcherService {
 
         orderRepository.save(new Order(1, 35, 25, OrderAction.BID, "dkerr", 25));
         orderRepository.save(new Order(2, 40, 25, OrderAction.BID, "dkerr", 25));
-        orderRepository.save(new Order(2, 40, 15, OrderAction.BID, "dkerr", 25));
-        orderRepository.save(new Order(3, 45, 25, OrderAction.BID, "dkerr", 25));
+        orderRepository.save(new Order(3, 40, 15, OrderAction.BID, "dkerr", 25));
+        orderRepository.save(new Order(4, 45, 25, OrderAction.BID, "dkerr", 25));
         tradeRepository.save(new Trade(50, 30, "system"));
 
         Map<Boolean, List<Order>> initialOrders = orderRepository.findAll().stream().collect(Collectors.partitioningBy(Order::isBid));
@@ -56,6 +54,8 @@ public class MatcherService {
             orders.add(index, order.get());
             orderRepository.save(order.get());
         }
+        this.template.convertAndSend("/topic/public/bids", getPublicBids());
+        this.template.convertAndSend("/topic/public/asks", getPublicAsks());
 
         return new List[]{bidOrders, askOrders};
     }
@@ -98,22 +98,13 @@ public class MatcherService {
         return Optional.ofNullable(order);
     }
 
-    public List<PublicOrder> getPublicBids() {
+    public Map<Integer, Integer> getPublicBids() {
         return orderRepository.findAllByAction(OrderAction.BID).stream()
-                .map((order) -> new PublicOrder(order.getQuantity(), order.getPrice()))
-                .sorted(Comparator.comparingInt(PublicOrder::getPrice))
-                .collect(Collectors.toList());
+                .collect(Collectors.toMap(Order::getPrice, Order::getQuantity, Integer::sum));
     }
 
-    public List<PublicOrder> getPublicAsks() {
+    public Map<Integer, Integer> getPublicAsks() {
         return orderRepository.findAllByAction(OrderAction.ASK).stream()
-                .map((order) -> new PublicOrder(order.getQuantity(), order.getPrice()))
-                .sorted(Comparator.comparingInt(PublicOrder::getPrice))
-                .collect(Collectors.toList());
-    }
-
-    @Scheduled(fixedRate = 3000)
-    public void fireSomething() {
-        this.template.convertAndSend("/topic/greetings", "Hello");
+                .collect(Collectors.toMap(Order::getPrice, Order::getQuantity, Integer::sum));
     }
 }

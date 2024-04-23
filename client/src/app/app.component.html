@@ -1,8 +1,17 @@
 <div class="main">
-  <p>Here</p>
-  <router-outlet></router-outlet>
+  <mat-toolbar color="primary">Tradr</mat-toolbar>
+  <div class="content">
+    <div class="order-form-container">
+      <app-order-form/>
+    </div>
+    <div class="aggregated-order-book-container">
+      <app-public-orders/>
+    </div>
+    <div class="trade-history-container">
+      <app-trade-history/>
+    </div>
+    <div class="private-order-book-container">
+      <app-private-order-book/>
+    </div>
+  </div>
 </div>
-
-<app-order-form />
-<app-public-orders />
-<app-trade-history />

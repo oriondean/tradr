@@ -1,3 +1,30 @@
-.body {
-    background-color: black;
+.main {
+  height: 100%;
+}
+
+.content {
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: 2fr 4fr 2fr 2fr;
+  grid-template-rows: 8fr 2fr;
+  grid-gap: 1rem;
+  height: calc(100% - 96px);
+}
+
+.order-form-container {
+  height: 100%;
+}
+
+.aggregated-order-book-container {
+  height: 100%;
+  grid-column: 3;
+}
+
+.private-order-book-container {
+  height: 150px;
+  grid-column: span 4;
+}
+
+.trade-history-container {
+  height: 100%
 }

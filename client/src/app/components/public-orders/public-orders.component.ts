@@ -1,28 +1,32 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-
-type PublicOrder = {
-  quantity: number;
-  price: number;
-  orderType: 'BID' | 'ASK';
-};
+import { PublicOrdersService } from '../../services/public-orders/public-orders.service';
+import { Client } from '@stomp/stompjs';
+import { MatTableModule } from '@angular/material/table';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-public-orders',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatCardModule, MatTableModule],
   templateUrl: './public-orders.component.html',
   styleUrl: './public-orders.component.css',
 })
 export class PublicOrdersComponent {
-  orders: PublicOrder[] = [
-    { quantity: 35, price: 20, orderType: 'BID' },
-    { quantity: 70, price: 60, orderType: 'BID' },
-    { quantity: 5, price: 15, orderType: 'ASK' },
-    { quantity: 10, price: 30, orderType: 'BID' },
-    { quantity: 45, price: 25, orderType: 'ASK' },
-  ];
+  askOrders: Map<number, number> = new Map<number, number>();
+  bidOrders: Map<number, number> = new Map<number, number>();
+  displayedColumns = ['price', 'quantity'];
+  bidDataSource = Object.entries(this.bidOrders);
+  askDataSource = Object.entries(this.askOrders);
 
-  askOrders = this.orders.filter((order) => order.orderType == 'ASK');
-  bidOrders = this.orders.filter((order) => order.orderType == 'BID');
+  constructor(private orderService: PublicOrdersService) {
+    this.orderService.getAsks().subscribe((asks) => {
+      this.askOrders = asks;
+      this.askDataSource = Object.entries(this.askOrders);
+    });
+    this.orderService.getBids().subscribe((bids) => {
+      this.bidOrders = bids;
+      this.bidDataSource = Object.entries(this.bidOrders);
+    });
+  }
 }

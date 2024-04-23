@@ -1,0 +1,33 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title> Order Form</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-button-toggle-group
+      name="fontStyle"
+      aria-label="Font Style"
+      [(ngModel)]="bidInitialValue"
+      (change)="bidAskValue($event)"
+    >
+      <mat-button-toggle value="bid">BID</mat-button-toggle>
+      <mat-button-toggle value="ask">ASK</mat-button-toggle>
+    </mat-button-toggle-group>
+    <form [formGroup]="formGroup" (ngSubmit)="postData()">
+      <p>
+        <mat-form-field>
+          <mat-label>Quantity</mat-label>
+          <input matInput formControlName="quantity" placeholder="0" />
+        </mat-form-field>
+      </p>
+      <p>
+        <mat-form-field>
+          <mat-label>Price</mat-label>
+          <input matInput formControlName="price" placeholder="0" />
+        </mat-form-field>
+      </p>
+      <button color="primary" mat-flat-button (click)="postData()">
+        Place order
+      </button>
+    </form>
+  </mat-card-content>
+</mat-card>

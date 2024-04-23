@@ -23,15 +23,15 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         config.enableSimpleBroker("/topic")
-                .setHeartbeatValue(new long[] {10000, 20000})
+                .setHeartbeatValue(new long[]{10000, 20000})
                 .setTaskScheduler(this.messageBrokerTaskScheduler);
-
-        config.setApplicationDestinationPrefixes("/app");
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/").setAllowedOrigins("http://localhost:4200");
+        registry.addEndpoint("/")
+                .setAllowedOrigins("http://localhost:4200")
+                .setHandshakeHandler(new CustomHandshakeHandler());
     }
 
 }
