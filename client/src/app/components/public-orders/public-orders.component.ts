@@ -5,7 +5,6 @@ import { Client } from '@stomp/stompjs';
 import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
 
-
 @Component({
   selector: 'app-public-orders',
   standalone: true,
@@ -16,11 +15,19 @@ import { MatCardModule } from '@angular/material/card';
 export class PublicOrdersComponent {
   askOrders: Map<number, number> = new Map<number, number>();
   bidOrders: Map<number, number> = new Map<number, number>();
-  displayedColumns = ['quantity', 'price'];
+  displayedColumns = ['price', 'quantity'];
+  bidDataSource = Object.entries(this.bidOrders);
+  askDataSource = Object.entries(this.askOrders);
 
   constructor(private orderService: PublicOrdersService) {
-    this.orderService.getAsks().subscribe((asks) => (this.askOrders = asks));
-    this.orderService.getBids().subscribe((bids) => (this.bidOrders = bids));
+    this.orderService.getAsks().subscribe((asks) => {
+      this.askOrders = asks;
+      this.askDataSource = Object.entries(this.askOrders);
+    });
+    this.orderService.getBids().subscribe((bids) => {
+      this.bidOrders = bids;
+      this.bidDataSource = Object.entries(this.bidOrders);
+    });
 
     const bidClient = new Client({
       brokerURL: 'ws://localhost:8080/',
@@ -29,6 +36,7 @@ export class PublicOrdersComponent {
 
         bidClient.subscribe('/topic/public/bids', (bids) => {
           this.bidOrders = JSON.parse(bids.body);
+          this.bidDataSource = Object.entries(this.bidOrders);
         });
       },
       onStompError: (e) => console.log('onStompError', e),
@@ -42,6 +50,7 @@ export class PublicOrdersComponent {
 
         askClient.subscribe('/topic/public/asks', (asks) => {
           this.askOrders = JSON.parse(asks.body);
+          this.askDataSource = Object.entries(this.askOrders);
         });
       },
       onStompError: (e) => console.log('onStompError', e),
