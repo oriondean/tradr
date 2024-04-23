@@ -1,19 +1,51 @@
 <div class="order-form">
   <div class="order-form-title">
-    <h3>Order Form</h3>
+    <h2 class="order-form-title-text">Order Form</h2>
   </div>
-  <div>
-    <div>
-      <p>Quantity</p>
-      <input placeholder="0" step="1" [(ngModel)]="quantity" />
-    </div>
-    <div>
-      <p>Price</p>
-      <input placeholder="0" type="number" step="1" [(ngModel)]="price" />
-    </div>
-    <div class="buy-sell-btns">
-      <button class="buy" (click)="postData(true)">Buy</button>
-      <button class="sell" (click)="postData(false)">Sell</button>
-    </div>
+  <div class="order-form-body">
+    <mat-button-toggle-group
+      class="bid-ask-btns"
+      name="fontStyle"
+      aria-label="Font Style"
+      [(ngModel)] = "bidInitialValue"
+      (change)="bidAskValue($event)"
+    >
+      <mat-button-toggle class="bid" value="bid">BID</mat-button-toggle>
+      <mat-button-toggle class="ask" value="ask">ASK</mat-button-toggle>
+    </mat-button-toggle-group>
+    <form [formGroup]="formGroup" (ngSubmit)="postData()" class="form-container">
+      <div class="separate-mat-card-and-btn">
+        <mat-card>
+          <mat-card-content>
+            <mat-form-field>
+              <mat-label class="pos">Amount</mat-label>
+              <input
+                matInput
+                class="amount-input-box"
+                formControlName="amount"
+                placeholder="0"
+                type="number"
+              />
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Price</mat-label>
+              <input
+                matInput
+                formControlName="price"
+                class="price-input-box"
+                placeholder="0"
+                type="number"
+              />
+            </mat-form-field>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <div class="complete-trade-container">
+        <button mat-button type="submit" class="complete-trade-btn">
+          Complete Trade
+        </button>
+      </div>
+    </form>
   </div>
 </div>
