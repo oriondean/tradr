@@ -1,61 +1,9 @@
-.order-form {
-  max-width: 20rem;
-  min-height: 28rem;
-  justify-content: center;
-}
-
-.order-form-title {
-  color: white;
+mat-card-content {
   display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.order-form-title-text {
-  padding-top: 1rem;
-}
-
-.bid {
-  width: 5rem;
-}
-
-.ask {
-  width: 5rem;
-}
-
-
-mat-card {
-  min-height: 10rem;
-  width: 100%;
-}
-
-.mat-card-content {
   flex-direction: column;
   align-items: center;
 }
 
-.amount-input-box {
-  text-align: right;
-}
-
-.amount-input-box::-webkit-inner-spin-button,
-amount-input-box::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-}
-
-.price-input-box {
-  border: white;
-  /* text-align: right; */
-}
-
-.price-input-box::-webkit-inner-spin-button,
-price-input-box::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-}
-
-.complete-trade-container {
-  text-align: center;
-}
-
-.complete-trade-btn {
+mat-button-toggle-group {
+  margin:  1rem 0;
 }

@@ -1,45 +1,42 @@
-<mat-card color="accent">
+<mat-card>
   <mat-card-header>
-    <mat-card-title> Order Form </mat-card-title>
+    <mat-card-title> Order Form</mat-card-title>
   </mat-card-header>
-  <mat-card-content class="mat-card-content">
+  <mat-card-content>
     <mat-button-toggle-group
-      class="bid-ask-btns"
       name="fontStyle"
       aria-label="Font Style"
       [(ngModel)]="bidInitialValue"
       (change)="bidAskValue($event)"
     >
-      <mat-button-toggle class="bid" value="bid">BID</mat-button-toggle>
-      <mat-button-toggle class="ask" value="ask">ASK</mat-button-toggle>
+      <mat-button-toggle value="bid">BID</mat-button-toggle>
+      <mat-button-toggle value="ask">ASK</mat-button-toggle>
     </mat-button-toggle-group>
     <form
       [formGroup]="formGroup"
       (ngSubmit)="postData()"
-      class="form-container"
     >
-      <mat-form-field>
-        <mat-label class="pos">Amount</mat-label>
-        <input
-          matInput
-          formControlName="amount"
-          placeholder="0"
-          type="number"
-        />
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Price</mat-label>
-        <input
-          matInput
-          formControlName="price"
-          placeholder="0"
-          type="number"
-        />
-      </mat-form-field>
+      <p>
+        <mat-form-field>
+          <mat-label>Amount</mat-label>
+          <input
+            matInput
+            formControlName="amount"
+            placeholder="0"
+          />
+        </mat-form-field>
+      </p>
+      <p>
+        <mat-form-field>
+          <mat-label>Price</mat-label>
+          <input
+            matInput
+            formControlName="price"
+            placeholder="0"
+          />
+        </mat-form-field>
+      </p>
+      <button color="primary" mat-flat-button>Place order</button>
     </form>
-
-    <mat-card-actions class="complete-trade-container">
-      <button mat-flat-button>Place order</button>
-    </mat-card-actions>
   </mat-card-content>
 </mat-card>
