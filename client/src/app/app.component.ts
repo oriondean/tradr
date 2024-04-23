@@ -33,6 +33,14 @@ export class AppComponent {
         client.subscribe('/topic/trades', (greeting) => {
           console.log('trade inbound', JSON.parse(greeting.body));
         });
+
+        client.subscribe('/user/topic/hello', (greeting) => {
+          console.log('user hello', greeting);
+        });
+
+        client.subscribe('/topic/hello', (greeting) => {
+          console.log('hello', greeting);
+        });
       },
       onStompError: (e) => console.log('onStompError', e),
       onWebSocketError: (e) => console.log('onWebsocketError', e.message),
