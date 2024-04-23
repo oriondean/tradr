@@ -7,9 +7,9 @@
         <p class="column">Quantity</p>
         <p class="column">Price</p>
       </div>
-      <div class="row bid-row" *ngFor="let bid of bidOrders">
-        <p class="column">{{ bid.quantity }}</p>
-        <p class="column">{{ bid.price }}</p>
+      <div class="row bid-row" *ngFor="let bid of bidOrders | keyvalue">
+        <p class="column">{{ bid.value }}</p>
+        <p class="column">{{ bid.key }}</p>
       </div>
     </div>
     <div class="ask-orders column">
@@ -18,9 +18,9 @@
         <p class="column">Quantity</p>
         <p class="column">Price</p>
       </div>
-      <div class="row ask-row" *ngFor="let ask of askOrders">
-        <p class="column">{{ ask.quantity }}</p>
-        <p class="column">{{ ask.price }}</p>
+      <div class="row ask-row" *ngFor="let ask of askOrders | keyvalue">
+        <p class="column">{{ ask.value }}</p>
+        <p class="column">{{ ask.key }}</p>
       </div>
     </div>
   </div>

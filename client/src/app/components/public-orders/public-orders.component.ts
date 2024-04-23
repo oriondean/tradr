@@ -1,11 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { PublicOrdersService } from '../../services/public-orders/public-orders.service';
+import { Client } from '@stomp/stompjs';
 
-type PublicOrder = {
-  quantity: number;
-  price: number;
-  orderType: 'BID' | 'ASK';
-};
 
 @Component({
   selector: 'app-public-orders',
@@ -15,14 +12,40 @@ type PublicOrder = {
   styleUrl: './public-orders.component.css',
 })
 export class PublicOrdersComponent {
-  orders: PublicOrder[] = [
-    { quantity: 35, price: 20, orderType: 'BID' },
-    { quantity: 70, price: 60, orderType: 'BID' },
-    { quantity: 5, price: 15, orderType: 'ASK' },
-    { quantity: 10, price: 30, orderType: 'BID' },
-    { quantity: 45, price: 25, orderType: 'ASK' },
-  ];
+  askOrders: Map<number, number> = new Map<number, number>();
+  bidOrders: Map<number, number> = new Map<number, number>();
 
-  askOrders = this.orders.filter((order) => order.orderType == 'ASK');
-  bidOrders = this.orders.filter((order) => order.orderType == 'BID');
+  constructor(private orderService: PublicOrdersService) {
+    this.orderService.getAsks().subscribe((asks) => (this.askOrders = asks));
+    this.orderService.getBids().subscribe((bids) => (this.bidOrders = bids));
+
+    const bidClient = new Client({
+      brokerURL: 'ws://localhost:8080/',
+      onConnect: (frame) => {
+        console.log('connected', frame);
+
+        bidClient.subscribe('/topic/public/bids', (bids) => {
+          this.bidOrders = JSON.parse(bids.body);
+        });
+      },
+      onStompError: (e) => console.log('onStompError', e),
+      onWebSocketError: (e) => console.log('onWebsocketError', e.message),
+    });
+
+    const askClient = new Client({
+      brokerURL: 'ws://localhost:8080/',
+      onConnect: (frame) => {
+        console.log('connected', frame);
+
+        askClient.subscribe('/topic/public/asks', (asks) => {
+          this.askOrders = JSON.parse(asks.body);
+        });
+      },
+      onStompError: (e) => console.log('onStompError', e),
+      onWebSocketError: (e) => console.log('onWebsocketError', e.message),
+    });
+
+    bidClient.activate();
+    askClient.activate();
+  }
 }

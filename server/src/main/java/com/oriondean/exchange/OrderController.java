@@ -1,10 +1,10 @@
 package com.oriondean.exchange;
 
-import com.oriondean.exchange.data.PublicOrder;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -25,11 +25,11 @@ public class OrderController {
         return repository.findAll();
     }
     @GetMapping("/bids")
-    List<PublicOrder> getBids() {
+    Map<Integer, Integer> getBids() {
         return service.getPublicBids();
     }
     @GetMapping("/asks")
-    List<PublicOrder> getAsks() {
+    Map<Integer, Integer> getAsks() {
         return service.getPublicAsks();
     }
 

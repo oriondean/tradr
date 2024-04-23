@@ -1,6 +1,5 @@
 package com.oriondean.exchange;
 
-import com.oriondean.exchange.data.PublicOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -11,7 +10,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.summingInt;
 
 @Service
 public class MatcherService {
@@ -59,6 +57,8 @@ public class MatcherService {
             orders.add(index, order.get());
             orderRepository.save(order.get());
         }
+        this.template.convertAndSend("/topic/public/bids", getPublicBids());
+        this.template.convertAndSend("/topic/public/asks", getPublicAsks());
 
         return new List[]{bidOrders, askOrders};
     }
@@ -100,40 +100,14 @@ public class MatcherService {
         return Optional.ofNullable(order);
     }
 
-    public List<PublicOrder> getPublicBids() {
-        return aggregateOrders(orderRepository.findAllByAction(OrderAction.BID).stream()
-                .map((order) -> new PublicOrder(order.getQuantity(), order.getPrice()))
-                .sorted(Comparator.comparingInt(PublicOrder::getPrice))
-                .collect(Collectors.toList()));
+    public Map<Integer, Integer> getPublicBids() {
+        return orderRepository.findAllByAction(OrderAction.BID).stream()
+                .collect(Collectors.toMap(Order::getPrice, Order::getQuantity, (first, second) -> first+second));
     }
 
-    public List<PublicOrder> getPublicAsks() {
-        return aggregateOrders(orderRepository.findAllByAction(OrderAction.ASK).stream()
-                .map((order) -> new PublicOrder(order.getQuantity(), order.getPrice()))
-                .sorted(Comparator.comparingInt(PublicOrder::getPrice))
-                .collect(Collectors.toList()));
-    }
-
-    private List<PublicOrder> aggregateOrders(List<PublicOrder> orders) {
-
-        PublicOrder currentOrder = null;
-        ArrayList<PublicOrder> result = new ArrayList<>();
-
-        for (PublicOrder order: orders){
-            if (currentOrder == null) {
-                currentOrder = order;
-            } else {
-                if (currentOrder.getPrice() == order.getPrice()) {
-                    currentOrder.setQuantity(currentOrder.getQuantity() + order.getQuantity());
-                } else {
-                    result.add(currentOrder);
-                    currentOrder = order;
-                }
-            }
-        }
-        result.add(currentOrder);
-
-        return result;
+    public Map<Integer, Integer> getPublicAsks() {
+        return orderRepository.findAllByAction(OrderAction.ASK).stream()
+                .collect(Collectors.toMap(Order::getPrice, Order::getQuantity, (first, second) -> first+second));
     }
 
     @Scheduled(fixedRate = 3000)
