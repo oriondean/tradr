@@ -1,17 +1,21 @@
 <div class="main">
-  <mat-toolbar color="primary">Tradr</mat-toolbar>
+  <div class="banner">
+    <mat-toolbar color="primary">Tradr</mat-toolbar>
+    <app-user />
+  </div>
+
   <div class="content">
     <div class="order-form-container">
-      <app-order-form/>
+      <app-order-form />
     </div>
     <div class="aggregated-order-book-container">
-      <app-public-orders/>
+      <app-public-orders />
     </div>
     <div class="trade-history-container">
-      <app-trade-history/>
+      <app-trade-history />
     </div>
     <div class="private-order-book-container">
-      <app-private-order-book/>
+      <app-private-order-book />
     </div>
   </div>
 </div>
