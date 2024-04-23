@@ -52,7 +52,7 @@ public class Order {
             return false; // can't match orders of identical sides
         }
 
-        return isBid() ? price < order.price : price >= order.price;
+        return isBid() == (price < order.price);
     }
 
     public boolean hasWorsePrice(Order order) throws Exception {
