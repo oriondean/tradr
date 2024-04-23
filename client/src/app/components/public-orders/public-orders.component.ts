@@ -4,6 +4,7 @@ import { PublicOrdersService } from '../../services/public-orders/public-orders.
 import { Client } from '@stomp/stompjs';
 import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
+import { StompService } from '../../services/api/Stomp.service';
 
 @Component({
   selector: 'app-public-orders',
@@ -19,7 +20,10 @@ export class PublicOrdersComponent {
   bidDataSource = Object.entries(this.bidOrders);
   askDataSource = Object.entries(this.askOrders);
 
-  constructor(private orderService: PublicOrdersService) {
+  constructor(
+    private orderService: PublicOrdersService,
+    private stompService: StompService
+  ) {
     this.orderService.getAsks().subscribe((asks) => {
       this.askOrders = asks;
       this.askDataSource = Object.entries(this.askOrders);
@@ -27,6 +31,16 @@ export class PublicOrdersComponent {
     this.orderService.getBids().subscribe((bids) => {
       this.bidOrders = bids;
       this.bidDataSource = Object.entries(this.bidOrders);
+    });
+
+    stompService.subscribe('/topic/public/bids', (bids) => {
+      this.bidOrders = JSON.parse(bids.body);
+      this.bidDataSource = Object.entries(this.bidOrders);
+    });
+
+    stompService.subscribe('/topic/public/asks', (asks) => {
+      this.askOrders = JSON.parse(asks.body);
+      this.askDataSource = Object.entries(this.askOrders);
     });
   }
 }
