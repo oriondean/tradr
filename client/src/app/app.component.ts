@@ -6,6 +6,7 @@ import { Client } from '@stomp/stompjs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { PrivateOrderBookComponent } from './components/private-order-book/private-order-book.component';
 import { TradeHistoryComponent } from './components/trade-history/trade-history.component';
+import { UserComponent } from './components/user/user.component';
 
 @Component({
   selector: 'app-root',
@@ -17,6 +18,7 @@ import { TradeHistoryComponent } from './components/trade-history/trade-history.
     MatToolbarModule,
     PrivateOrderBookComponent,
     TradeHistoryComponent,
+    UserComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
