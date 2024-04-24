@@ -3,13 +3,8 @@ import {
   HttpClientModule,
   HttpHeaders,
 } from '@angular/common/http';
-import { Component, Input } from '@angular/core';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  FormsModule,
-} from '@angular/forms';
+import { Component } from '@angular/core';
+import { FormControl, FormGroup, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Action, Trade } from '../../../types';
 import {
@@ -17,13 +12,11 @@ import {
   MatButtonToggleModule,
 } from '@angular/material/button-toggle';
 import { MatCardModule } from '@angular/material/card';
-import {
-  MatFormFieldControl,
-  MatFormFieldModule,
-} from '@angular/material/form-field';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { UserService } from '../../services/user/user.service';
 
 @Component({
   selector: 'app-order-form',
@@ -50,10 +43,12 @@ export class OrderFormComponent {
     price: this.price,
   });
   bidInitialValue = 'bid';
+  selectedUser: string = '';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private userService: UserService) {
+    console.log(this.userService.getUser());
+  }
   action: Action = Action.BID;
-  buy = true;
 
   sendData(data: Trade) {
     const url = 'http://localhost:8080/order/';
@@ -64,12 +59,13 @@ export class OrderFormComponent {
   }
 
   postData() {
+    this.selectedUser = this.userService.getUser();
     if (this.formGroup.value.quantity && this.formGroup.value.price) {
       const data: Trade = {
         quantity: this.formGroup.value.quantity,
         price: this.formGroup.value.price,
         action: this.action,
-        account: 'dkerr',
+        account: this.selectedUser,
       };
       this.sendData(data).subscribe(
         (response) => {

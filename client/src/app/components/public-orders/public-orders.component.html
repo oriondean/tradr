@@ -1,34 +1,7 @@
-<!-- <div class="public-orders">
-  <p>Orders</p>
-  <div class="order-table">
-    <div class="bid-orders column">
-      <p class="row">Bids</p>
-      <div class="row">
-        <p class="column">Quantity</p>
-        <p class="column">Price</p>
-      </div>
-      <div class="row bid-row" *ngFor="let bid of bidOrders | keyvalue">
-        <p class="column">{{ bid.value }}</p>
-        <p class="column">{{ bid.key }}</p>
-      </div>
-    </div>
-    <div class="ask-orders column">
-      <p class="row">Asks</p>
-      <div class="row">
-        <p class="column">Quantity</p>
-        <p class="column">Price</p>
-      </div>
-      <div class="row ask-row" *ngFor="let ask of askOrders | keyvalue">
-        <p class="column">{{ ask.value }}</p>
-        <p class="column">{{ ask.key }}</p>
-      </div>
-    </div>
-  </div>
-</div> -->
 <mat-card>
   <mat-card-header>
     <mat-card-title>Order Book</mat-card-title>
-    <mat-card-subtitle>Last Updated: Never</mat-card-subtitle>
+    <mat-card-subtitle *ngIf="lastUpdated">Last Updated: {{lastUpdated | timeago }}</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
     <div class="order-tables">

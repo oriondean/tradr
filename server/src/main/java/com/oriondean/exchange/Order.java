@@ -52,7 +52,7 @@ public class Order {
             return false; // can't match orders of identical sides
         }
 
-        return isBid() ? price < order.price : price >= order.price;
+        return isBid() == (price < order.price);
     }
 
     public boolean hasWorsePrice(Order order) throws Exception {
@@ -63,8 +63,8 @@ public class Order {
         return isBid() ? price > order.price : price < order.price;
     }
 
-    public Order reduceQuantity(Integer quantity) {
-        return new Order(id, price, quantity - quantity, action, account, initialQuantity);
+    public Order reduceQuantity(Integer toReduce) {
+        return new Order(id, price, quantity - toReduce, action, account, initialQuantity);
     }
 
     public boolean equals(Object o) {
