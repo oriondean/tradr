@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { PublicOrdersService } from '../../services/public-orders/public-orders.service';
 import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
 import { StompService } from '../../services/api/Stomp.service';
@@ -22,20 +21,8 @@ export class PublicOrdersComponent {
   lastUpdated?: Date;
 
   constructor(
-    private orderService: PublicOrdersService,
     private stompService: StompService
   ) {
-    this.orderService.getAsks().subscribe((asks) => {
-      this.askOrders = asks;
-      this.askDataSource = Object.entries(this.askOrders);
-      this.lastUpdated = new Date();
-    });
-    this.orderService.getBids().subscribe((bids) => {
-      this.bidOrders = bids;
-      this.bidDataSource = Object.entries(this.bidOrders);
-      this.lastUpdated = new Date();
-    });
-
     this.stompService.subscribe('/topic/public/bids', (bids) => {
       this.bidOrders = JSON.parse(bids.body);
       this.bidDataSource = Object.entries(this.bidOrders);
