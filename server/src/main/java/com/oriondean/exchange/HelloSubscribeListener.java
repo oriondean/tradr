@@ -16,6 +16,7 @@ import java.util.Map;
 public class HelloSubscribeListener {
 
     private final SimpMessagingTemplate template;
+    private final MatcherService service;
 
     @EventListener
     public void handleSessionSubscribeEvent(SessionSubscribeEvent event) {
@@ -26,6 +27,14 @@ public class HelloSubscribeListener {
 
         if (destinations.getFirst().equals("/topic/hello")) {
             template.convertAndSendToUser(user.getName(), "/topic/hello", "Hello " + user.getName());
+        }
+
+        if (destinations.getFirst().equals("/topic/public/bids")) {
+            template.convertAndSend("/topic/public/bids", service.getPublicBids());
+        }
+
+        if (destinations.getFirst().equals("/topic/public/asks")) {
+            template.convertAndSend("/topic/public/asks", service.getPublicAsks());
         }
     }
 }

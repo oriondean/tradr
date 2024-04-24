@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Client, messageCallbackType, StompSubscription } from '@stomp/stompjs';
+import { Client, messageCallbackType } from '@stomp/stompjs';
 
 @Injectable({
   providedIn: 'root',
