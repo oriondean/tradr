@@ -58,9 +58,9 @@ export class OrderFormComponent {
   action: Action = Action.BID;
 
   placeOrder() {
-    this.mode = 'indeterminate';
     this.selectedUser = this.userService.getUser();
     if (this.formGroup.value.quantity && this.formGroup.value.price) {
+      this.mode = 'indeterminate';
       const data: Trade = {
         quantity: this.formGroup.value.quantity,
         price: this.formGroup.value.price,
@@ -69,7 +69,7 @@ export class OrderFormComponent {
       };
       this.orderFormService.placeOrder(data).subscribe(
         (response) => {
-          this.mode = 'determinate';
+          this.mode = 'indeterminate';
           console.log('Response:', response);
         },
         (error) => {
