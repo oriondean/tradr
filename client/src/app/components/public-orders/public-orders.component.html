@@ -1,7 +1,7 @@
 <mat-card>
   <mat-card-header>
     <mat-card-title>Order Book</mat-card-title>
-    <mat-card-subtitle>Last Updated: {{lastUpdated | timeago }}</mat-card-subtitle>
+    <mat-card-subtitle *ngIf="lastUpdated">Last Updated: {{lastUpdated | timeago }}</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
     <div class="order-tables">
