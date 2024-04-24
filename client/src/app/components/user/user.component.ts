@@ -1,3 +1,4 @@
+import { UserService } from './../../services/user/user.service';
 import { Component } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -12,9 +13,12 @@ import { MatSelectModule } from '@angular/material/select';
 export class UserComponent {
   users: string[] = ['Dean', 'Tom', 'Jesse', 'Gazelle'];
 
-  constructor() {}
+  selectedUser = 'Dean';
+
+  constructor(private userService: UserService) {}
 
   onUserSelectionChange(event: any) {
-    console.log(event.value);
+    this.selectedUser = event.value;
+    this.userService.setUser(event.value);
   }
 }
