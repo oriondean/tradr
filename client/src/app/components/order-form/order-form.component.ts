@@ -1,8 +1,5 @@
-import {
-  HttpClient,
-  HttpClientModule,
-  HttpHeaders,
-} from '@angular/common/http';
+import { OrderFormService } from './../../services/order-form/order-form.service';
+import { HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -17,6 +14,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { UserService } from '../../services/user/user.service';
+import {
+  ProgressSpinnerMode,
+  MatProgressSpinnerModule,
+} from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-order-form',
@@ -31,6 +32,7 @@ import { UserService } from '../../services/user/user.service';
     ReactiveFormsModule,
     MatInputModule,
     MatButtonModule,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './order-form.component.html',
   styleUrl: './order-form.component.css',
@@ -45,20 +47,18 @@ export class OrderFormComponent {
   bidInitialValue = 'bid';
   selectedUser: string = '';
 
-  constructor(private http: HttpClient, private userService: UserService) {
+  constructor(
+    private userService: UserService,
+    private orderFormService: OrderFormService
+  ) {
     console.log(this.userService.getUser());
   }
+  mode: ProgressSpinnerMode = 'determinate';
+
   action: Action = Action.BID;
 
-  sendData(data: Trade) {
-    const url = 'http://localhost:8080/order/';
-    const headers = new HttpHeaders({
-      'Content-type': 'application/json',
-    });
-    return this.http.post(url, data, { headers });
-  }
-
-  postData() {
+  placeOrder() {
+    this.mode = 'indeterminate';
     this.selectedUser = this.userService.getUser();
     if (this.formGroup.value.quantity && this.formGroup.value.price) {
       const data: Trade = {
@@ -67,8 +67,9 @@ export class OrderFormComponent {
         action: this.action,
         account: this.selectedUser,
       };
-      this.sendData(data).subscribe(
+      this.orderFormService.placeOrder(data).subscribe(
         (response) => {
+          this.mode = 'determinate';
           console.log('Response:', response);
         },
         (error) => {
