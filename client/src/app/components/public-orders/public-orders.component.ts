@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { PublicOrdersService } from '../../services/public-orders/public-orders.service';
-import { Client } from '@stomp/stompjs';
 import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
 
