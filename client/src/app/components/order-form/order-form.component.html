@@ -12,7 +12,7 @@
       <mat-button-toggle value="bid">BID</mat-button-toggle>
       <mat-button-toggle value="ask">ASK</mat-button-toggle>
     </mat-button-toggle-group>
-    <form [formGroup]="formGroup" (ngSubmit)="postData()">
+    <form [formGroup]="formGroup" (ngSubmit)="placeOrder()">
       <p>
         <mat-form-field>
           <mat-label>Quantity</mat-label>
@@ -25,9 +25,16 @@
           <input matInput formControlName="price" placeholder="0" />
         </mat-form-field>
       </p>
-      <button color="primary" mat-flat-button (click)="postData()">
-        Place order
-      </button>
+      <div class="btn-spinner">
+        <button color="primary" mat-flat-button>Place order</button>
+        <mat-progress-spinner
+          class="example-margin"
+          color="blue"
+          [mode]="mode"
+          diameter="36"
+        >
+        </mat-progress-spinner>
+      </div>
     </form>
   </mat-card-content>
 </mat-card>
