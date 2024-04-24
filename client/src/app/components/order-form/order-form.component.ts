@@ -69,7 +69,7 @@ export class OrderFormComponent {
       };
       this.orderFormService.placeOrder(data).subscribe(
         (response) => {
-          this.mode = 'indeterminate';
+          this.mode = 'determinate';
           console.log('Response:', response);
         },
         (error) => {
