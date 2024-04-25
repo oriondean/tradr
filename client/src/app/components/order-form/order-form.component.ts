@@ -46,6 +46,8 @@ export class OrderFormComponent {
   });
   bidInitialValue = 'bid';
   selectedUser: string = '';
+  mode: ProgressSpinnerMode = 'indeterminate';
+  isLoading: boolean = false;
 
   constructor(
     private userService: UserService,
@@ -53,14 +55,13 @@ export class OrderFormComponent {
   ) {
     console.log(this.userService.getUser());
   }
-  mode: ProgressSpinnerMode = 'determinate';
 
   action: Action = Action.BID;
 
   placeOrder() {
     this.selectedUser = this.userService.getUser();
     if (this.formGroup.value.quantity && this.formGroup.value.price) {
-      this.mode = 'indeterminate';
+      this.isLoading = true;
       const data: Trade = {
         quantity: this.formGroup.value.quantity,
         price: this.formGroup.value.price,
@@ -69,7 +70,7 @@ export class OrderFormComponent {
       };
       this.orderFormService.placeOrder(data).subscribe(
         (response) => {
-          this.mode = 'determinate';
+          this.isLoading = false;
           console.log('Response:', response);
         },
         (error) => {

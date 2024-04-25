@@ -11,10 +11,6 @@ mat-button-toggle-group {
   margin: 1rem 0;
 }
 
-.btn-spinner {
-  display: flex;
-}
-
 mat-progress-spinner {
-  margin-left: 1rem;
+  margin-top: 22px;
 }

@@ -1,8 +1,12 @@
 import { Injectable } from '@angular/core';
 import { API_ROOT } from '../../../constants';
 import { Trade } from '../../../types';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { catchError, throwError } from 'rxjs';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+} from '@angular/common/http';
+import { catchError, delay, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -16,8 +20,10 @@ export class OrderFormService {
     const headers = new HttpHeaders({
       'Content-type': 'application/json',
     });
-    return this.http.post(this.url, data, { headers })
-    .pipe(catchError(this.handleError));
+    return this.http
+      .post(this.url, data, { headers })
+      .pipe(delay(750))
+      .pipe(catchError(this.handleError));
   }
 
   handleError(error: HttpErrorResponse) {
