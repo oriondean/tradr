@@ -3,7 +3,7 @@ export const enum Action {
   ASK = 'ASK',
 }
 
-export interface Trade {
+export interface Order {
   quantity: number;
   price: number;
   action: Action;
