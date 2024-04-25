@@ -25,12 +25,6 @@ export class TradeHistoryComponent {
       const trade = JSON.parse(tradeUpdate.body);
       this.tradeHistory = [...trade, ...this.tradeHistory];
       this.lastUpdated = new Date();
-      this.triggerChangeDetection();
     });
-  }
-  private triggerChangeDetection(): void {
-    if (!(this.cdr as any).destroyed) {
-      this.cdr.detectChanges();
-    }
   }
 }
