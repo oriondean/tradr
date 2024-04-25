@@ -6,6 +6,10 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionSubscribeEvent;
 
+import java.security.Principal;
+import java.util.List;
+import java.util.Map;
+
 @Component
 @RequiredArgsConstructor
 public class TradeEventListener {
@@ -16,7 +20,9 @@ public class TradeEventListener {
 
     @EventListener
     public void handleWebSocketConnectListener(SessionSubscribeEvent event) {
-        simpMessagingTemplate.convertAndSend("/topic/trades", repository.findAll());
+        Principal user = event.getUser();
+
+        simpMessagingTemplate.convertAndSendToUser(user.getName(),"/topic/trades", repository.findAll());
     }
 
 

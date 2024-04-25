@@ -1,21 +1,53 @@
-<div class="trade-history-table">
-  <div class="trade-history column">
-    <p class="row">Trade History</p>
-    <div class="row">
-      <p class="column">Quantity</p>
-      <p class="column">Price</p>
-      <p class="column">Time</p>
-    </div>
-    <div class="row" *ngFor="let trade of tradeHistory">
-      <p class="column">{{ trade.quantity }}</p>
-      <p class="column">{{ trade.price }}</p>
-      <p class="column">{{ trade.created | date: "dd-MM-yyy hh:mm:ss" }}</p>
-    </div>
-  </div>
-</div>
 <mat-card>
+  <mat-card-header>
+    <mat-card-title>Trade History</mat-card-title>
+    <mat-card-subtitle *ngIf="lastUpdated"
+      >Last Updated: {{ lastUpdated | timeago }}</mat-card-subtitle
+    >
+  </mat-card-header>
+  <mat-card-content>
+    <table mat-table [dataSource]="tradeHistory">
+      <ng-container matColumnDef="quantity">
+        <th mat-header-cell *matHeaderCellDef>Quantity</th>
+        <td mat-cell *matCellDef="let trade">{{ trade.quantity }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="price">
+        <th mat-header-cell *matHeaderCellDef>Price</th>
+        <td mat-cell *matCellDef="let trade">{{ trade.price }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="time">
+        <th mat-header-cell *matHeaderCellDef>Time</th>
+        <td mat-cell *matCellDef="let trade">
+          {{ trade.created | date : "dd-MM-yyy hh:mm:ss" }}
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </mat-card-content>
+</mat-card>
+
+<!-- <mat-card>
   <mat-card-header>
     <mat-card-title>Trades</mat-card-title>
     <mat-card-subtitle>Last Updated: Never</mat-card-subtitle>
   </mat-card-header>
-</mat-card>
+  <div class="trade-history-table">
+    <div class="trade-history column">
+      <p class="row">Trade History</p>
+      <div class="row">
+        <p class="column">Quantity</p>
+        <p class="column">Price</p>
+        <p class="column">Time</p>
+      </div>
+      <div class="row" *ngFor="let trade of tradeHistory">
+        <p class="column">{{ trade.quantity }}</p>
+        <p class="column">{{ trade.price }}</p>
+        <p class="column">{{ trade.created | date : "dd-MM-yyy hh:mm:ss" }}</p>
+      </div>
+    </div>
+  </div>
+</mat-card> -->

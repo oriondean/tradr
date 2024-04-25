@@ -1,42 +1,36 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { Client } from '@stomp/stompjs';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { TradeHistoryModel } from './trade-history.model';
-
-import { TradesService } from '../../services/trades/trades.service';
+import { MatCardModule } from '@angular/material/card';
+import { StompService } from '../../services/api/Stomp.service';
+import {  MatTableModule } from '@angular/material/table';
+import { TimeagoModule } from 'ngx-timeago';
 
 @Component({
   selector: 'app-trade-history',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatCardModule, MatTableModule, TimeagoModule],
   templateUrl: './trade-history.component.html',
   styleUrl: './trade-history.component.css',
 })
 export class TradeHistoryComponent {
   tradeHistory: TradeHistoryModel[] = [];
+  displayedColumns: string[] = ['quantity', 'price', 'time'];
+  lastUpdated?: Date;
 
   ngOnInit(): void {}
 
-  constructor(tradeService: TradesService) {
-    const client = new Client({
-      brokerURL: 'ws://localhost:8080/',
-      onConnect: (frame) => {
-        console.log('connected', frame);
-
-        client.subscribe('/topic/trades', (tradeUpdate) => {
-          const trade = JSON.parse(tradeUpdate.body);
-          // this.tradeHistory.unshift(trade);
-          this.tradeHistory = [...trade, this.tradeHistory];
-          console.log('trade inbound', JSON.parse(tradeUpdate.body));
-          console.log('trade history', this.tradeHistory);
-        }, {username: "test"});
-      },
-      onStompError: (e) => console.log('onStompError', e),
-      onWebSocketError: (e) => console.log('onWebsocketError', e.message),
+  constructor(private client: StompService, private cdr: ChangeDetectorRef) {
+    client.subscribe('/user/topic/trades', (tradeUpdate) => {
+      const trade = JSON.parse(tradeUpdate.body);
+      this.tradeHistory = [...trade, ...this.tradeHistory];
+      this.lastUpdated = new Date();
+      this.triggerChangeDetection();
     });
-
-    client.activate();
-    
   }
-  
+  private triggerChangeDetection(): void {
+    if (!(this.cdr as any).destroyed) {
+      this.cdr.detectChanges();
+    }
+  }
 }
