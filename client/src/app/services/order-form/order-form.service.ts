@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { API_ROOT } from '../../../constants';
-import { Trade } from '../../../types';
+import { Order } from '../../../types';
 import {
   HttpClient,
   HttpErrorResponse,
@@ -16,7 +16,7 @@ export class OrderFormService {
 
   constructor(private http: HttpClient) {}
 
-  placeOrder(data: Trade) {
+  placeOrder(data: Order) {
     const headers = new HttpHeaders({
       'Content-type': 'application/json',
     });

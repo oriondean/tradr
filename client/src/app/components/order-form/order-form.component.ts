@@ -3,7 +3,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Action, Trade } from '../../../types';
+import { Action, Order } from '../../../types';
 import {
   MatButtonToggleChange,
   MatButtonToggleModule,
@@ -62,7 +62,7 @@ export class OrderFormComponent {
     this.selectedUser = this.userService.getUser();
     if (this.formGroup.value.quantity && this.formGroup.value.price) {
       this.isLoading = true;
-      const data: Trade = {
+      const data: Order = {
         quantity: this.formGroup.value.quantity,
         price: this.formGroup.value.price,
         action: this.action,
