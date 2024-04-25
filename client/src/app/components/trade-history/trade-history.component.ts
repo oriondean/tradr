@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { TradeHistoryModel } from './trade-history.model';
 import { MatCardModule } from '@angular/material/card';
 import { StompService } from '../../services/api/Stomp.service';
@@ -20,7 +20,7 @@ export class TradeHistoryComponent {
 
   ngOnInit(): void {}
 
-  constructor(private client: StompService, private cdr: ChangeDetectorRef) {
+  constructor(private client: StompService) {
     client.subscribe('/user/topic/trades', (tradeUpdate) => {
       const trade = JSON.parse(tradeUpdate.body);
       this.tradeHistory = [...trade, ...this.tradeHistory];
