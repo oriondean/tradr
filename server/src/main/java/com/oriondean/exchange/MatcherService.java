@@ -68,7 +68,8 @@ public class MatcherService {
             Integer matchedQuantity = Math.min(existing.getQuantity(), order.getQuantity());
 
             Trade trade = tradeRepository.save(new Trade(existing.getPrice(), matchedQuantity, order.getAccount()));
-            this.template.convertAndSend("/topic/trades", trade);
+
+            this.template.convertAndSend("/topic/trades", List.of(trade) );
 
             if (order.getQuantity() >= existing.getQuantity()) {
                 // TODO emit "matched-order"
