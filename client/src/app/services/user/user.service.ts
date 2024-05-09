@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
+import { LocalService } from '../local.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  private user: string = '';
-
-  constructor() {}
+  constructor(private localStore: LocalService) {}
 
   setUser(user: string) {
-    this.user = user;
+    this.localStore.saveData('user', user);
   }
 
   getUser(): string {
-    return this.user;
+    const user = this.localStore.getData('user') || '';
+    return user
   }
 }
