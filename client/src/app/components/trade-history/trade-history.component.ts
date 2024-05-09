@@ -21,7 +21,7 @@ export class TradeHistoryComponent {
   ngOnInit(): void {}
 
   constructor(private client: StompService) {
-    client.subscribe('/user/topic/trades', (tradeUpdate) => {
+    client.subscribe('/topic/trades', (tradeUpdate) => {
       const trade = JSON.parse(tradeUpdate.body);
       this.tradeHistory = [...trade, ...this.tradeHistory];
       this.lastUpdated = new Date();
