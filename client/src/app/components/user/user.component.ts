@@ -2,6 +2,7 @@ import { UserService } from './../../services/user/user.service';
 import { Component } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
+import { LocalService } from '../../services/local.service';
 
 @Component({
   selector: 'app-user',
@@ -11,14 +12,17 @@ import { MatSelectModule } from '@angular/material/select';
   styleUrl: './user.component.css',
 })
 export class UserComponent {
-  users: string[] = ['Dean', 'Tom', 'Jesse', 'Gazelle'];
+  users: string[] = ['Dean', 'Tom', 'Jesse', 'Gazell'];
 
-  selectedUser = 'Dean';
+  selectedUser = localStorage.getItem('user') || 'Dean';
 
-  constructor(private userService: UserService) {}
+  constructor(private localStore: LocalService) {}
 
+  getSelectedUser() {
+    return this.localStore.getData('user');
+  }
   onUserSelectionChange(event: any) {
     this.selectedUser = event.value;
-    this.userService.setUser(event.value);
+    this.localStore.saveData('user', event.value);
   }
 }
