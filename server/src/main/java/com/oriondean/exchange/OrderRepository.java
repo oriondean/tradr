@@ -6,4 +6,6 @@ import java.util.List;
 
 interface OrderRepository extends JpaRepository<Order, Integer> {
     List<Order> findAllByAction(OrderAction action);
+
+    List<Order> findAllByAccount(String account);
 }

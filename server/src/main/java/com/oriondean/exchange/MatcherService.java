@@ -107,4 +107,8 @@ public class MatcherService {
         return orderRepository.findAllByAction(OrderAction.ASK).stream()
                 .collect(Collectors.toMap(Order::getPrice, Order::getQuantity, Integer::sum));
     }
+
+    public List<Order> getOrdersByAccount(String account) {
+        return orderRepository.findAllByAccount(account);
+    }
 }

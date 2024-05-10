@@ -38,4 +38,9 @@ public class OrderController {
         Order toAdd = Order.fromOrderRequest(request);
         return service.addOrder(toAdd);
     }
+
+    @GetMapping("/orders/{account}")
+    List<Order> getAccountOrders(@PathVariable String account) {
+        return service.getOrdersByAccount(account);
+    }
 }
