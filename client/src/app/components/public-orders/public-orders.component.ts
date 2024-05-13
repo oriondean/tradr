@@ -13,22 +13,20 @@ import { WebSocketDataService } from '../../services/web-socket-data.service';
   styleUrl: './public-orders.component.css',
 })
 export class PublicOrdersComponent implements OnInit {
-  askOrders: Map<number, number> = new Map<number, number>();
-  bidOrders: Map<number, number> = new Map<number, number>();
+  askOrders: [number, number][]=[];
+  bidOrders: [number, number][]=[];
   displayedColumns = ['price', 'quantity'];
-  bidDataSource = Object.entries(this.bidOrders);
-  askDataSource = Object.entries(this.askOrders);
   lastUpdated?: Date;
 
   constructor(private webSocketDataService: WebSocketDataService) {}
 
   ngOnInit(): void {
     this.webSocketDataService.bidOrders$.subscribe((bidOrders) => {
-      this.bidOrders = this.bidOrders;
+      this.bidOrders = bidOrders;
     });
 
     this.webSocketDataService.askOrders$.subscribe((askOrders) => {
-      this.askOrders = this.askOrders;
+      this.askOrders = askOrders;
     });
   }
 }

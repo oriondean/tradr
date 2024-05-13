@@ -22,7 +22,7 @@ export class TradeHistoryComponent {
 
     ngOnInit(): void {
       this.webSocketDataService.tradeHistory$.subscribe((tradeHistory) => { 
-        this.tradeHistory = this.tradeHistory;
+        this.tradeHistory = tradeHistory;
       })
     }
   }

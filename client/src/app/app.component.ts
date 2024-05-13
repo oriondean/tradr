@@ -20,7 +20,7 @@ import { DepthChartComponent } from './components/depth-chart/depth-chart.compon
     PrivateOrderBookComponent,
     TradeHistoryComponent,
     UserComponent,
-    DepthChartComponent
+    DepthChartComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
