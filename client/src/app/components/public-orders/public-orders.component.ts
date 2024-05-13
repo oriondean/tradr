@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
-import { StompService } from '../../services/api/Stomp.service';
 import { TimeagoModule } from 'ngx-timeago';
+import { WebSocketDataService } from '../../services/web-socket-data.service';
 
 @Component({
   selector: 'app-public-orders',
@@ -12,7 +12,7 @@ import { TimeagoModule } from 'ngx-timeago';
   templateUrl: './public-orders.component.html',
   styleUrl: './public-orders.component.css',
 })
-export class PublicOrdersComponent {
+export class PublicOrdersComponent implements OnInit {
   askOrders: Map<number, number> = new Map<number, number>();
   bidOrders: Map<number, number> = new Map<number, number>();
   displayedColumns = ['price', 'quantity'];
@@ -20,19 +20,15 @@ export class PublicOrdersComponent {
   askDataSource = Object.entries(this.askOrders);
   lastUpdated?: Date;
 
-  constructor(
-    private stompService: StompService
-  ) {
-    this.stompService.subscribe('/topic/public/bids', (bids) => {
-      this.bidOrders = JSON.parse(bids.body);
-      this.bidDataSource = Object.entries(this.bidOrders);
-      this.lastUpdated = new Date();
+  constructor(private webSocketDataService: WebSocketDataService) {}
+
+  ngOnInit(): void {
+    this.webSocketDataService.bidOrders$.subscribe((bidOrders) => {
+      this.bidOrders = this.bidOrders;
     });
 
-    this.stompService.subscribe('/topic/public/asks', (asks) => {
-      this.askOrders = JSON.parse(asks.body);
-      this.askDataSource = Object.entries(this.askOrders);
-      this.lastUpdated = new Date();
+    this.webSocketDataService.askOrders$.subscribe((askOrders) => {
+      this.askOrders = this.askOrders;
     });
   }
 }

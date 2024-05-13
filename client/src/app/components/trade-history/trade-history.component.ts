@@ -2,9 +2,9 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { TradeHistoryModel } from './trade-history.model';
 import { MatCardModule } from '@angular/material/card';
-import { StompService } from '../../services/api/Stomp.service';
 import {  MatTableModule } from '@angular/material/table';
 import { TimeagoModule } from 'ngx-timeago';
+import { WebSocketDataService } from '../../services/web-socket-data.service';
 
 @Component({
   selector: 'app-trade-history',
@@ -18,13 +18,11 @@ export class TradeHistoryComponent {
   displayedColumns: string[] = ['quantity', 'price', 'time'];
   lastUpdated?: Date;
 
-  ngOnInit(): void {}
+  constructor(private webSocketDataService: WebSocketDataService) {}
 
-  constructor(private client: StompService) {
-    client.subscribe('/topic/trades', (tradeUpdate) => {
-      const trade = JSON.parse(tradeUpdate.body);
-      this.tradeHistory = [...trade, ...this.tradeHistory];
-      this.lastUpdated = new Date();
-    });
+    ngOnInit(): void {
+      this.webSocketDataService.tradeHistory$.subscribe((tradeHistory) => { 
+        this.tradeHistory = this.tradeHistory;
+      })
+    }
   }
-}
