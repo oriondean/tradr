@@ -4,7 +4,7 @@ import { StompService } from './api/Stomp.service';
 import { TradeHistoryModel } from '../components/trade-history/trade-history.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class WebSocketDataService {
   private bidOrdersSubject = new BehaviorSubject<[number, number][]>([]);
@@ -15,7 +15,7 @@ export class WebSocketDataService {
 
   private tradeHistorySubject = new BehaviorSubject<TradeHistoryModel[]>([]);
   tradeHistory$ = this.tradeHistorySubject.asObservable();
-  
+
   constructor(private stompService: StompService) {
     this.stompService.subscribe('/topic/public/bids', (bids) => {
       const bidOrders = this.convertMapToArray(JSON.parse(bids.body));
@@ -26,15 +26,26 @@ export class WebSocketDataService {
       const askOrders = this.convertMapToArray(JSON.parse(asks.body));
       this.askOrdersSubject.next(askOrders);
     });
-   
+
     this.stompService.subscribe('/topic/trades', (tradeUpdate) => {
       const trade = JSON.parse(tradeUpdate.body);
-      this.tradeHistorySubject.next([...trade, ...this.tradeHistorySubject.value]);
-      
-    });
-   }
 
-   private convertMapToArray(mapData: {[key:number]: number }): [number,number][] {
+      const existingTrade = this.tradeHistorySubject.value.find(
+        (t) => t.id === trade.id
+      );
+
+      if (!existingTrade) {
+        this.tradeHistorySubject.next([
+          ...trade,
+          ...this.tradeHistorySubject.value,
+        ]);
+      }
+    });
+  }
+
+  private convertMapToArray(mapData: {
+    [key: number]: number;
+  }): [number, number][] {
     return Object.entries(mapData).map(([key, value]) => [+key, value]);
-   }
+  }
 }
