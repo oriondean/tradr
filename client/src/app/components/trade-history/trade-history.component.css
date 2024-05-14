@@ -20,3 +20,17 @@
 mat-card {
   height: 100%;
 }
+
+.scrollable-content { 
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.scrollable-content::-webkit-scrollbar {
+    display:none;
+  }
