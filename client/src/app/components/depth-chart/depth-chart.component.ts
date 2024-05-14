@@ -106,7 +106,7 @@ export class DepthChartComponent implements OnInit {
             area: {
               fillOpacity: 0.2,
               lineWidth: 1,
-              step: 'center',
+              step: 'left',
               threshold: null,
             },
           },
@@ -118,13 +118,13 @@ export class DepthChartComponent implements OnInit {
           series: [
             {
               name: 'Bids',
-              data: bidOrders,
+              data: [[bidOrders[0][0] - 5, bidOrders[0][1]], ...bidOrders],
               color: '#03a7a8',
               type: 'area',
             },
             {
               name: 'Asks',
-              data: askOrders,
+              data: [...askOrders, [askOrders[askOrders.length-1][0] + 5,askOrders[askOrders.length-1][1]]],
               color: '#fc5857',
               type: 'area',
             },
