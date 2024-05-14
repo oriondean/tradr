@@ -21,6 +21,11 @@ app-user {
   height: 100%;
 }
 
+.order-depth-chart-container { 
+  height: 100%;
+  grid-column: 2;
+}
+
 .aggregated-order-book-container {
   height: 100%;
   grid-column: 3;

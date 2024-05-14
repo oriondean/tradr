@@ -28,6 +28,10 @@ public class MatcherService {
         orderRepository.save(new Order(2, 40, 25, OrderAction.BID, "dkerr", 25));
         orderRepository.save(new Order(3, 40, 15, OrderAction.BID, "dkerr", 25));
         orderRepository.save(new Order(4, 45, 25, OrderAction.BID, "dkerr", 25));
+        orderRepository.save(new Order(5, 50, 10, OrderAction.ASK, "dkerr", 10));
+        orderRepository.save(new Order(6, 60, 45, OrderAction.ASK, "dkerr", 60));
+        orderRepository.save(new Order(7, 35, 40, OrderAction.BID, "dkerr", 40));
+        orderRepository.save(new Order(8, 46, 5, OrderAction.ASK, "dkerr", 10));
         tradeRepository.save(new Trade(50, 30, "system"));
 
         Map<Boolean, List<Order>> initialOrders = orderRepository.findAll().stream().collect(Collectors.partitioningBy(Order::isBid));
