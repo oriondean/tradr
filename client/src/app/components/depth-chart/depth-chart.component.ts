@@ -26,8 +26,10 @@ export class DepthChartComponent implements OnInit {
             type: 'area',
             backgroundColor: '#424242',
             borderColor: '#fff',
+            // height: '100%',
             style: {
               color: '#fff',
+              // height: 100 ,
             },
           },
           title: {
